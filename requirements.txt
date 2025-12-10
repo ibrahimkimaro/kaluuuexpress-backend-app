@@ -1,0 +1,44 @@
+# Django and REST Framework
+Django>=4.2.0
+djangorestframework>=3.14.0
+django-cors-headers>=4.0.0
+
+# JWT Authentication
+djangorestframework-simplejwt>=5.2.0
+
+# Password hashing (for better security)
+argon2-cffi>=21.3.0
+
+# Image processing (for profile pictures)
+Pillow>=10.0.0
+
+# Environment variables
+python-decouple>=3.8
+
+# PostgreSQL adapter (recommended for production)
+psycopg2-binary>=2.9.0
+
+# For better datetime handling
+python-dateutil>=2.8.0
+
+# For API documentation (optional)
+drf-yasg>=1.21.0
+
+# For better serialization
+drf-spectacular>=0.26.0
+
+# Security
+django-ratelimit>=4.1.0
+
+# Testing
+pytest>=7.3.0
+pytest-django>=4.5.0
+factory-boy>=3.2.0
+
+# Code quality
+flake8>=6.0.0
+black>=23.3.0
+
+# Development
+django-debug-toolbar>=4.0.0
+ipython>=8.12.0
