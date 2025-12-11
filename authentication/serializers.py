@@ -18,13 +18,16 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'email', 'full_name', 'phone_number', 
+            'email', 'full_name', 'phone_number',
+            'country','city',
             'password', 'confirm_password'
         ]
         extra_kwargs = {
             'email': {'required': True},
             'full_name': {'required': True},
             'phone_number': {'required': True},
+             'country':{'required':True},
+            'city':{'required':True}, 
         }
     
     def validate_full_name(self, value):
@@ -138,7 +141,7 @@ class UserLoginSerializer(serializers.Serializer):
                     if user_obj.failed_login_attempts >= 5:
                         from django.utils import timezone
                         from datetime import timedelta
-                        user_obj.account_locked_until = timezone.now() + timedelta(minutes=30)
+                        user_obj.account_locked_until = timezone.now() + timedelta(minutes=2)
                     
                     user_obj.save()
                 except User.DoesNotExist:
