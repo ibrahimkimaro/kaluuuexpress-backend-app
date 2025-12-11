@@ -6,7 +6,7 @@ services:
     network_mode: "host"
     volumes:
       - static_volume:/app/staticfiles
-      - media_volume:/app/Media
+      - media_volume:/app/media
     environment:
       - SECRET_KEY=${SECRET_KEY:-fuM2OPz4i13m6DbGIO8sQ1rxRieZ5JVYY}
       - DEBUG=${DEBUG:-False}

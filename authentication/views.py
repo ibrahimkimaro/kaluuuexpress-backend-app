@@ -40,7 +40,7 @@ def create_login_history(request, user, is_successful=True, failure_reason=None)
     )
 
 
-class UserRegistrationView(generics.CreateAPIVie):
+class UserRegistrationView(generics.CreateAPIView):
 
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.AllowAny]
