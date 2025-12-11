@@ -38,9 +38,9 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Run gunicorn with increased header limit
-CMD ["gunicorn", "backend_app.wsgi:application", \
-     "--bind", "0.0.0.0:8000", \
-     "--workers", "3", \
-     "--timeout", "120", \
-     "--limit-request-field_size", "16384", \
-     "--limit-request-fields", "100"]
+# CMD ["gunicorn", "backend_app.wsgi:application", \
+#      "--bind", "0.0.0.0:8000", \
+#      "--workers", "3", \
+#      "--timeout", "120", \
+#      "--limit-request-field_size", "16384", \
+#      "--limit-request-fields", "100"]
