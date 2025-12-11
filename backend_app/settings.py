@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-lf%((hx5p^6$&qc-yinr-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '192.168.1.154,localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '157.245.227.236,localhost,127.0.0.1').split(',')
 
 
 
@@ -107,9 +107,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME', 'shipping_management'),
-        'USER': os.environ.get('DB_USER', 'apple'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'y2k007db'),
-        'HOST': os.environ.get('DB_HOST', 'host.docker.internal'),
+        'USER': os.environ.get('DB_USER', 'kaluu'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'kAluu@2025Express'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
         'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
