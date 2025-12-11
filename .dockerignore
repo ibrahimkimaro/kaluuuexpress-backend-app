@@ -1,0 +1,56 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info
+.eggs
+*.egg
+.mypy_cache
+.pytest_cache
+.coverage
+htmlcov
+
+# Virtual environments
+venv
+.venv
+env
+.env
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.docker
+
+# Local development
+*.sqlite3
+db.sqlite3
+*.log
+
+# Static files (will be collected during build)
+staticfiles/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+
+# Documentation
+*.md
+!README.md
+
+# Tests (optional - remove if you want tests in container)
+tests/
+*_test.py
+test_*.py

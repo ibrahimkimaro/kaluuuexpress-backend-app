@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-lf%((hx5p^6$&qc-yinr-d^t4l$c)^-qw@!a7fx=-=v=*%#^uh'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-lf%((hx5p^6$&qc-yinr-d^t4l$c)^-qw@!a7fx=-=v=*%#^uh')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = ['192.168.1.154','localhost','127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '192.168.1.154,localhost,127.0.0.1').split(',')
 
 
 
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -103,15 +104,15 @@ AUTH_USER_MODEL = 'authentication.User'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': 'shipping_management',
-                'USER': 'kaluu',
-                'PASSWORD': 'Kaluu@2025',
-                'HOST': 'localhost',  # Or the IP address/hostname of your PostgreSQL server
-                'PORT': '5432',           # Leave empty for default port or specify 5432
-            }
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'shipping_management'),
+        'USER': os.environ.get('DB_USER', 'apple'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'y2k007db'),
+        'HOST': os.environ.get('DB_HOST', 'host.docker.internal'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -147,13 +148,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# WhiteNoise configuration for serving static files in production
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'Media')
-MEDIA_URL = '/Media/'
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -162,7 +174,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Jazzmin Admin Theme Configuration
 from .jazzmin_settings import JAZZMIN_SETTINGS, JAZZMIN_UI_TWEAKS
-
-# Firebase Cloud Messaging Configuration
-# Download your service account key from Firebase Console and place it in your project
-FIREBASE_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'firebase-credentials.json')
