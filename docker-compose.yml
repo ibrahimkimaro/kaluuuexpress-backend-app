@@ -3,25 +3,19 @@ version: '3.8'
 services:
   web:
     build: .
-    ports:
-      - "8000:8000"
+    network_mode: "host"
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/Media
-    # environment:
-    #   - SECRET_KEY=${SECRET_KEY:-your-super-secret-key-change-in-production}
-    #   - DEBUG=${DEBUG:-False}
-    #   - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1}
-    #   - DB_NAME=${DB_NAME:-shipping_management}
-    #   - DB_USER=${DB_USER:-kaluu}
-    #   - DB_PASSWORD=${DB_PASSWORD:-Kaluu@2025}
-    #   - DB_HOST=${DB_HOST:-host.docker.internal}
-    #   - DB_PORT=${DB_PORT:-5432}
-    #   - EMAIL_HOST=${EMAIL_HOST:-}
-    #   - EMAIL_PORT=${EMAIL_PORT:-587}
-    #   - EMAIL_USE_TLS=${EMAIL_USE_TLS:-True}
-    #   - EMAIL_HOST_USER=${EMAIL_HOST_USER:-}
-    #   - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD:-}
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-fuM2OPz4i13m6DbGIO8sQ1rxRieZ5JVYY}
+      - DEBUG=${DEBUG:-False}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1,157.245.227.236}
+      - DB_NAME=${DB_NAME:-shipping_management}
+      - DB_USER=${DB_USER:-kaluu}
+      - DB_PASSWORD=${DB_PASSWORD:-kAluu@2025Express}
+      - DB_HOST=${DB_HOST:-127.0.0.1}
+      - DB_PORT=${DB_PORT:-5432}
     restart: unless-stopped
 
 volumes:
