@@ -16,7 +16,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD:-kAluu@2025Express}
       - DB_HOST=${DB_HOST:-127.0.0.1}
       - DB_PORT=${DB_PORT:-5432}
-    command: bash -c "python manage.py runserver 0.0.0.0:8008"
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
     restart: unless-stopped
 
 volumes:
