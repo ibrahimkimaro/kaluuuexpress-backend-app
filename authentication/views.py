@@ -42,6 +42,7 @@ def create_login_history(request, user, is_successful=True, failure_reason=None)
 
 class UserRegistrationView(generics.CreateAPIView):
 
+    authentication_classes = []  # Disable authentication (and CSRF) for registration
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.AllowAny]
     
@@ -66,6 +67,7 @@ class UserRegistrationView(generics.CreateAPIView):
 
 class UserLoginView(APIView):
 
+    authentication_classes = []  # Disable authentication (and CSRF) for login
     permission_classes = [permissions.AllowAny]
     serializer_class = UserLoginSerializer
     
@@ -249,12 +251,13 @@ class PasswordResetRequestView(APIView):
     """
     API endpoint for requesting password reset
     POST /api/auth/password-reset/
-    
+
     Request body:
     {
         "email": "user@example.com"
     }
     """
+    authentication_classes = []  # Disable authentication (and CSRF) for password reset
     permission_classes = [permissions.AllowAny]
     
     def post(self, request):
@@ -297,7 +300,7 @@ class PasswordResetConfirmView(APIView):
     """
     API endpoint for confirming password reset
     POST /api/auth/password-reset-confirm/
-    
+
     Request body:
     {
         "token": "reset_token_here",
@@ -305,6 +308,7 @@ class PasswordResetConfirmView(APIView):
         "confirm_password": "NewPass123"
     }
     """
+    authentication_classes = []  # Disable authentication (and CSRF) for password reset confirm
     permission_classes = [permissions.AllowAny]
     
     def post(self, request):
@@ -356,12 +360,13 @@ class EmailVerificationView(APIView):
     """
     API endpoint for email verification
     POST /api/auth/verify-email/
-    
+
     Request body:
     {
         "token": "verification_token_here"
     }
     """
+    authentication_classes = []  # Disable authentication (and CSRF) for email verification
     permission_classes = [permissions.AllowAny]
     
     def post(self, request):
@@ -469,12 +474,13 @@ class ResendVerificationEmailView(APIView):
     """
     API endpoint for resending verification email
     POST /api/auth/resend-verification/
-    
+
     Request body:
     {
         "email": "user@example.com"
     }
     """
+    authentication_classes = []  # Disable authentication (and CSRF) for resend verification
     permission_classes = [permissions.AllowAny]
     
     def post(self, request):
