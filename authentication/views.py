@@ -40,7 +40,7 @@ def create_login_history(request, user, is_successful=True, failure_reason=None)
     )
 
 
-class UserRegistrationView(generics.CreateAPIVie):
+class UserRegistrationView(generics.CreateAPIView):
 
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.AllowAny]
@@ -65,16 +65,7 @@ class UserRegistrationView(generics.CreateAPIVie):
 
 
 class UserLoginView(APIView):
-    """
-    API endpoint for user login
-    POST /api/auth/login/
-    
-    Request body:
-    {
-        "email": "user@example.com",
-        "password": "SecurePass123"
-    }
-    """
+
     permission_classes = [permissions.AllowAny]
     serializer_class = UserLoginSerializer
     
@@ -175,12 +166,12 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     
     Update request body:
     {
-        "full_name": "John Doe Updated",
+        "full_name": " ",
         "phone_number": "+255123456789",
         "address": "123 Main St",
         "city": "Dar es Salaam",
         "country": "Tanzania",
-        "postal_code": "12345"
+        :profile_picture",
     }
     """
     permission_classes = [permissions.IsAuthenticated]
