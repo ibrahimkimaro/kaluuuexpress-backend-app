@@ -77,10 +77,10 @@ REST_FRAMEWORK = {
 }
 
 # CSRF settings for API
-CSRF_TRUSTED_ORIGINS = [
-    'http://157.245.227.236',
-    'https://157.245.227.236',
-]
+#CSRF_TRUSTED_ORIGINS = [
+  #  'http://157.245.227.236',
+ #   'https://157.245.227.236',
+#]
 
 ROOT_URLCONF = 'backend_app.urls'
 
