@@ -41,8 +41,6 @@ def create_login_history(request, user, is_successful=True, failure_reason=None)
 
 
 class UserRegistrationView(generics.CreateAPIView):
-
-    authentication_classes = []  # Disable authentication (and CSRF) for registration
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.AllowAny]
     
@@ -66,8 +64,6 @@ class UserRegistrationView(generics.CreateAPIView):
 
 
 class UserLoginView(APIView):
-
-    authentication_classes = []  # Disable authentication (and CSRF) for login
     permission_classes = [permissions.AllowAny]
     serializer_class = UserLoginSerializer
     
@@ -257,7 +253,7 @@ class PasswordResetRequestView(APIView):
         "email": "user@example.com"
     }
     """
-    authentication_classes = []  # Disable authentication (and CSRF) for password reset
+
     permission_classes = [permissions.AllowAny]
     
     def post(self, request):
@@ -366,7 +362,6 @@ class EmailVerificationView(APIView):
         "token": "verification_token_here"
     }
     """
-    authentication_classes = []  # Disable authentication (and CSRF) for email verification
     permission_classes = [permissions.AllowAny]
     
     def post(self, request):
