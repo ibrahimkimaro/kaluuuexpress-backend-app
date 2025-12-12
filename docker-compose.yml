@@ -6,7 +6,7 @@ services:
     network_mode: "host"
     volumes:
       - static_volume:/app/staticfiles
-      - media_volume:/app/Media
+      - media_volume:/app/media
     environment:
       - SECRET_KEY=${SECRET_KEY:-fuM2OPz4i13m6DbGIO8sQ1rxRieZ5JVYY}
       - DEBUG=${DEBUG:-False}
@@ -16,7 +16,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD:-kAluu@2025Express}
       - DB_HOST=${DB_HOST:-127.0.0.1}
       - DB_PORT=${DB_PORT:-5432}
-    command: bash -c "python manage.py runserver 0.0.0.0:8008"
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
     restart: unless-stopped
 
 volumes:

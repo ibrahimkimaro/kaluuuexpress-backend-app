@@ -41,19 +41,7 @@ def create_login_history(request, user, is_successful=True, failure_reason=None)
 
 
 class UserRegistrationView(generics.CreateAPIView):
-    """
-    API endpoint for user registration
-    POST /api/auth/register/
-    
-    Request body:
-    {
-        "email": "user@example.com",
-        "full_name": "John Doe",
-        "phone_number": "+255123456789",
-        "password": "SecurePass123",
-        "confirm_password": "SecurePass123"
-    }
-    """
+
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.AllowAny]
     
@@ -61,21 +49,7 @@ class UserRegistrationView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        
-        # Generate email verification token
-        token = secrets.token_urlsafe(32)
-        EmailVerification.objects.create(
-            user=user,
-            token=token,
-            expires_at=timezone.now() + timedelta(hours=24)
-        )
-        
-        # TODO: Send verification email
-        # send_verification_email(user.email, token)
-        
-        # Generate JWT tokens
-        refresh = RefreshToken.for_user(user)
-        
+      
         # Create login history
         create_login_history(request, user, is_successful=True)
         
@@ -91,16 +65,7 @@ class UserRegistrationView(generics.CreateAPIView):
 
 
 class UserLoginView(APIView):
-    """
-    API endpoint for user login
-    POST /api/auth/login/
-    
-    Request body:
-    {
-        "email": "user@example.com",
-        "password": "SecurePass123"
-    }
-    """
+
     permission_classes = [permissions.AllowAny]
     serializer_class = UserLoginSerializer
     
@@ -201,12 +166,12 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     
     Update request body:
     {
-        "full_name": "John Doe Updated",
+        "full_name": " ",
         "phone_number": "+255123456789",
         "address": "123 Main St",
         "city": "Dar es Salaam",
         "country": "Tanzania",
-        "postal_code": "12345"
+        :profile_picture",
     }
     """
     permission_classes = [permissions.IsAuthenticated]
