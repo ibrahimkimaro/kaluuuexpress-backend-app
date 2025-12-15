@@ -199,3 +199,9 @@ class UserSession(models.Model):
     def is_valid(self):
         """Check if session is still valid"""
         return self.is_active and timezone.now() < self.expires_at
+    
+
+    def deactivate(self):
+        """Deactivate the session"""
+        self.is_active = False
+        self.save()

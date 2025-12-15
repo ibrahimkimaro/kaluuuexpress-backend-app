@@ -170,3 +170,42 @@ class Shipment(models.Model):
     @property
     def is_delivered(self):
         return self.status == 'delivered'
+    
+
+
+
+
+class PackingList(models.Model):
+    """Simple Packing List - Stores only PDF files"""
+    
+    # Auto-generated code
+    code = models.CharField(max_length=20, unique=True)
+    
+    # Date
+    date = models.DateField(default=timezone.now)
+    
+    # Creator (staff who created the list)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='packing_lists'
+    )
+    
+    # Summary data (for display without opening PDF)
+    total_cartons = models.IntegerField(default=0)
+    total_weight = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    
+    # PDF file (uploaded from Flutter)
+    pdf_file = models.FileField(upload_to='packing_lists/%Y/%m/', max_length=500)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Packing List'
+        verbose_name_plural = 'Packing Lists'
+    
+    def __str__(self):
+        return f"{self.code} - {self.date}"

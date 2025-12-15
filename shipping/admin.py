@@ -5,7 +5,7 @@ from django.urls import path
 from django.http import JsonResponse
 from django.utils.html import format_html
 from django.db.models import Count, Sum
-from .models import ServiceTier, WeightHandling, Invoice, Shipment
+from .models import PackingList, ServiceTier, WeightHandling, Invoice, Shipment
 
 
 # ============ Service Tier & Weight Handling Admin ============
@@ -278,3 +278,33 @@ class ShipmentAdmin(admin.ModelAdmin):
         self.message_user(request, f'{updated} shipment(s) moved to next stage.')
     update_to_next_stage.short_description = 'Move to Next Stage'
 
+
+
+
+@admin.register(PackingList)
+class PackingListAdmin(admin.ModelAdmin):
+    list_display = ['code', 'date', 'created_by_name', 'total_cartons', 'total_weight', 'created_at']
+    list_filter = ['date', 'created_by']
+    search_fields = ['code', 'created_by__full_name', 'created_by__email']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('code', 'date', 'created_by')
+        }),
+        ('Packing Details', {
+            'fields': ('total_cartons', 'total_weight', 'pdf_file')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def created_by_name(self, obj):
+        return obj.created_by.full_name if obj.created_by else 'N/A'
+    created_by_name.short_description = 'Created By'
+    
+
+
+    

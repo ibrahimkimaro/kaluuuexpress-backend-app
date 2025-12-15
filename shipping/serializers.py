@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ServiceTier, WeightHandling, Invoice, Shipment
+from .models import ServiceTier, WeightHandling, Invoice, Shipment, PackingList
 
 
 # ============ Service Tier & Weight Handling Serializers ============
@@ -92,3 +92,28 @@ class ShipmentCreateSerializer(serializers.ModelSerializer):
             'estimated_delivery',
             'admin_notes'
         ]
+
+
+
+# ============ Packing List Serializers ============
+class PackingListSerializer(serializers.ModelSerializer):
+    """Serializer for packing list"""
+    
+    created_by_name = serializers.CharField(source='created_by.full_name', read_only=True)
+    pdf_url = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = PackingList
+        fields = [
+            'id', 'code', 'date', 'created_by', 'created_by_name',
+            'total_cartons', 'total_weight', 'pdf_file', 'pdf_url',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['code', 'created_by']
+    
+    def get_pdf_url(self, obj):
+        if obj.pdf_file:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.pdf_file.url)
+        return None
