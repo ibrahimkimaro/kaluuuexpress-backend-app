@@ -182,5 +182,15 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # For Gmail
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'kaluuexpressaircargo@gmail.com'  # Your email
+EMAIL_HOST_PASSWORD = 'xatrsijjjppcrwfd'  # App password (not regular password)
+DEFAULT_FROM_EMAIL = 'Kaluu Express Cargo <kaluuexpressaircargo@gmail.com>'
+
+
 # Jazzmin Admin Theme Configuration
 from .jazzmin_settings import JAZZMIN_SETTINGS, JAZZMIN_UI_TWEAKS

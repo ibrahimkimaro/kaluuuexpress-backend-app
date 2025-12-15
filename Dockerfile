@@ -23,7 +23,7 @@ RUN pip install --no-cache-dir gunicorn
 COPY . .
 
 # Create directories for static and media files
-RUN mkdir -p /app/staticfiles /app/Media
+RUN mkdir -p /app/staticfiles /app/media
 
 # Collect static files
 RUN python manage.py collectstatic --noinput

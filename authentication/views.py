@@ -6,6 +6,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.utils import timezone
 from datetime import timedelta
 import secrets
+from .utils.email import send_password_reset_email
 
 from .models import (
     User, EmailVerification, PasswordResetToken, 
@@ -48,7 +49,8 @@ class UserRegistrationView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-      
+
+        refresh = RefreshToken.for_user(user)
         # Create login history
         create_login_history(request, user, is_successful=True)
         
@@ -275,7 +277,7 @@ class PasswordResetRequestView(APIView):
                 )
                 
                 # TODO: Send password reset email
-                # send_password_reset_email(user.email, token)
+                send_password_reset_email(user.email, token)
                 
             except User.DoesNotExist:
                 # Don't reveal whether user exists
