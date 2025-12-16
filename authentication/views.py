@@ -51,8 +51,6 @@ def create_login_history(request, user, is_successful=True, failure_reason=None)
     )
 
 
-class UserRegistrationView(generics.CreateAPIView):
-
 @method_decorator(csrf_exempt, name='dispatch')
 class UserRegistrationView(generics.CreateAPIView):
 
