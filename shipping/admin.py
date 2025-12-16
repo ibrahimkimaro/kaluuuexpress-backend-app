@@ -283,14 +283,14 @@ class ShipmentAdmin(admin.ModelAdmin):
 
 @admin.register(PackingList)
 class PackingListAdmin(admin.ModelAdmin):
-    list_display = ['code', 'unique_id', 'date', 'created_by_name', 'total_cartons', 'total_weight', 'created_at']
+    list_display = [ 'unique_id', 'date', 'created_by_name', 'total_cartons', 'total_weight', 'created_at']
     list_filter = ['date', 'created_by']
-    search_fields = ['code', 'created_by__full_name', 'created_by__email']
+    search_fields = ['created_by__full_name', 'created_by__email']
     readonly_fields = ['unique_id', 'created_at', 'updated_at']
     
     fieldsets = (
         ('Basic Information', {
-            'fields': ('unique_id', 'code', 'date', 'created_by')
+            'fields': ('unique_id', 'date', 'created_by')
         }),
         ('Packing Details', {
             'fields': ('total_cartons', 'total_weight', 'pdf_file')

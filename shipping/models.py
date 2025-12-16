@@ -180,7 +180,7 @@ class PackingList(models.Model):
     
     # Auto-generated code
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    code = models.CharField(max_length=20, unique=True)
+    # code = models.CharField(max_length=20, unique=True)
     
     # Date
     date = models.DateField(default=timezone.now)
@@ -209,4 +209,4 @@ class PackingList(models.Model):
         verbose_name_plural = 'Packing Lists'
     
     def __str__(self):
-        return f"{self.code} - {self.date}"
+        return f"{self.unique_id} - {self.date}"

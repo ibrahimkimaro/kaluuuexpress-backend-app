@@ -105,11 +105,11 @@ class PackingListSerializer(serializers.ModelSerializer):
     class Meta:
         model = PackingList
         fields = [
-            'id', 'code', 'date', 'created_by', 'created_by_name',
+            'id', 'date', 'created_by', 'created_by_name',
             'total_cartons', 'total_weight', 'pdf_file', 'pdf_url',
             'created_at', 'updated_at'
         ]
-        read_only_fields = ['code', 'created_by']
+        read_only_fields = [ 'created_by']
     
     def get_pdf_url(self, obj):
         if obj.pdf_file:
