@@ -53,7 +53,7 @@ class Invoice(models.Model):
     )
 
     total_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    paying_bill = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    paying_bill = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Total Paid")
     credit_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
     payment_status = models.CharField(
@@ -68,6 +68,22 @@ class Invoice(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def update_payment_totals(self):
+        """Recalculate total paid and credit amount based on related payments"""
+        total_paid = self.payments.aggregate(total=models.Sum('amount'))['total'] or Decimal('0.00')
+        self.paying_bill = total_paid
+        self.credit_amount = self.total_amount - self.paying_bill
+        
+        # Update payment status
+        if self.paying_bill >= self.total_amount:
+            self.payment_status = 'paid'
+        elif self.paying_bill > 0:
+            self.payment_status = 'partially_paid'
+        else:
+            self.payment_status = 'unpaid'
+            
+        self.save()
+
     def save(self, *args, **kwargs):
 
         if not self.invoice_number:
@@ -79,16 +95,55 @@ class Invoice(models.Model):
             self.invoice_number = f"INV-{number:04d}"
 
         # CALCULATION — backend only
-        service_price = Decimal(self.service_tier.price_per_kg_usd)
-        handling_price = Decimal(self.weight_handling.rate_tsh_per_kg)
-
-        self.total_amount = self.weight_kg * service_price * handling_price
+        if self.service_tier and self.weight_handling:
+            service_price = Decimal(self.service_tier.price_per_kg_usd)
+            handling_price = Decimal(self.weight_handling.rate_tsh_per_kg)
+            self.total_amount = self.weight_kg * service_price * handling_price
+        
+        # If this is an existing instance, we might want to ensure totals are correct
+        # But usually update_payment_totals is called when payments change
         self.credit_amount = self.total_amount - Decimal(self.paying_bill)
 
         super().save(*args, **kwargs)
 
     def __str__(self):
         return self.invoice_number
+
+
+class Payment(models.Model):
+    """Model to track partial payments for an invoice"""
+    PAYMENT_METHODS = [
+        ('cash', 'Cash'),
+        ('bank', 'Bank Transfer'),
+        ('mobile', 'Mobile Money'),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='payments')
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    date = models.DateField(default=timezone.now)
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHODS, default='cash')
+    reference_number = models.CharField(max_length=100, blank=True, null=True, help_text="Transaction ID or Receipt Number")
+    notes = models.TextField(blank=True, null=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-date', '-created_at']
+    
+    def __str__(self):
+        return f"{self.invoice.invoice_number} - {self.amount}"
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Update invoice totals after saving payment
+        self.invoice.update_payment_totals()
+    
+    def delete(self, *args, **kwargs):
+        invoice = self.invoice
+        super().delete(*args, **kwargs)
+        # Update invoice totals after deleting payment
+        invoice.update_payment_totals()
 
 
 
@@ -180,7 +235,7 @@ class PackingList(models.Model):
     
     # Auto-generated code
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    code = models.CharField(max_length=20, unique=True)
+    # code = models.CharField(max_length=20, unique=True)
     
     # Date
     date = models.DateField(default=timezone.now)
@@ -209,4 +264,4 @@ class PackingList(models.Model):
         verbose_name_plural = 'Packing Lists'
     
     def __str__(self):
-        return f"{self.code} - {self.date}"
+        return f"{self.unique_id} - {self.date}"

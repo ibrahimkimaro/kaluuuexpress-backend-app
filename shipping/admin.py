@@ -5,7 +5,15 @@ from django.urls import path
 from django.http import JsonResponse
 from django.utils.html import format_html
 from django.db.models import Count, Sum
-from .models import PackingList, ServiceTier, WeightHandling, Invoice, Shipment
+from .models import PackingList, ServiceTier, WeightHandling, Invoice, Shipment, Payment
+
+
+# ============ Payment Inline ============
+class PaymentInline(admin.TabularInline):
+    model = Payment
+    extra = 0
+    fields = ('amount', 'date', 'payment_method', 'reference_number', 'notes')
+    ordering = ('-date',)
 
 
 # ============ Service Tier & Weight Handling Admin ============
@@ -46,7 +54,7 @@ class InvoiceAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
     list_per_page = 25
     
-    readonly_fields = ('invoice_number', 'total_amount', 'credit_amount', 'created_at')
+    readonly_fields = ('invoice_number', 'total_amount', 'paying_bill', 'credit_amount', 'created_at')
     
     fieldsets = (
         ('Basic Information', {
@@ -67,6 +75,8 @@ class InvoiceAdmin(admin.ModelAdmin):
     
     class Media:
         js = ('admin/js/invoice_calculator.js',)
+    
+    inlines = [PaymentInline]
     
     def user_name(self, obj):
         return obj.user.full_name if obj.user else 'N/A'
@@ -283,14 +293,14 @@ class ShipmentAdmin(admin.ModelAdmin):
 
 @admin.register(PackingList)
 class PackingListAdmin(admin.ModelAdmin):
-    list_display = ['code', 'unique_id', 'date', 'created_by_name', 'total_cartons', 'total_weight', 'created_at']
+    list_display = [ 'unique_id', 'date', 'created_by_name', 'total_cartons', 'total_weight', 'created_at']
     list_filter = ['date', 'created_by']
-    search_fields = ['code', 'created_by__full_name', 'created_by__email']
+    search_fields = ['created_by__full_name', 'created_by__email']
     readonly_fields = ['unique_id', 'created_at', 'updated_at']
     
     fieldsets = (
         ('Basic Information', {
-            'fields': ('unique_id', 'code', 'date', 'created_by')
+            'fields': ('unique_id', 'date', 'created_by')
         }),
         ('Packing Details', {
             'fields': ('total_cartons', 'total_weight', 'pdf_file')
