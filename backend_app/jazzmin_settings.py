@@ -82,6 +82,7 @@ JAZZMIN_SETTINGS = {
         "shipping.Invoice": "fas fa-file-invoice-dollar",
         "shipping.ServiceTier": "fas fa-layer-group",
         "shipping.WeightHandling": "fas fa-weight",
+        "shipping.PackingList": "fas fa-clipboard-list",
     },
     
     # Icons that are used when one is not manually specified

@@ -8,9 +8,10 @@ from django.utils.html import format_html
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     ordering = ['-date_joined']
-    list_display = ['id', 'full_name', 'email', 'phone_number', 'country', 'city', 'is_active', 'is_staff', 'user_status']
-    list_filter = ('is_staff', 'is_active', 'is_superuser', 'country', 'date_joined')
+    list_display = ['id', 'full_name', 'email', 'phone_number', 'country', 'city', 'can_create_packing_list', 'is_active', 'is_staff', 'user_status']
+    list_filter = ('is_staff', 'is_active', 'is_superuser', 'can_create_packing_list', 'country', 'date_joined')
     search_fields = ('phone_number', 'email', 'full_name', 'country', 'city')
+    list_editable = ('can_create_packing_list',)
     list_per_page = 25
     date_hierarchy = 'date_joined'
     
@@ -21,7 +22,11 @@ class UserAdmin(BaseUserAdmin):
         ('Personal Information', {
             'fields': ('full_name', 'email', 'profile_picture', 'country', 'city')
         }),
-        ('Permissions', {
+        ('Application Permissions', {
+            'fields': ('can_create_packing_list',),
+            'description': 'Control specific application features for this user.'
+        }),
+        ('System Permissions', {
             'fields': ('is_active', 'is_staff', 'is_superuser'),
             'classes': ('collapse',)
         }),
