@@ -1,21 +1,29 @@
 from django.core.mail import send_mail
 from django.conf import settings
+import logging
 import threading
+
+logger = logging.getLogger(__name__)
+
 class EmailThread(threading.Thread):
     def __init__(self, subject, html_content, recipient_list):
         self.subject = subject
         self.recipient_list = recipient_list
         self.html_content = html_content
         threading.Thread.__init__(self)
+
     def run(self):
-        send_mail(
-            subject=self.subject,
-            message='',  # Plain text message (optional fallback)
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=self.recipient_list,
-            html_message=self.html_content,
-            fail_silently=False,
-        )
+        try:
+            send_mail(
+                subject=self.subject,
+                message='',  # Plain text message (optional fallback)
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=self.recipient_list,
+                html_message=self.html_content,
+                fail_silently=False,
+            )
+        except Exception as e:
+            logger.error(f"Failed to send email to {self.recipient_list}: {str(e)}")
 def send_password_reset_email(email, reset_link):
     """
     Sends a password reset email to the user.
