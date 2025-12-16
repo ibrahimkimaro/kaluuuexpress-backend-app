@@ -15,13 +15,14 @@ from .views import (
 )
 
 app_name = 'authentication'
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     # ==================== Authentication Endpoints ====================
     
     # Registration & Login
     path('register/', UserRegistrationView.as_view(), name='register'),
-    path('login/', UserLoginView.as_view(), name='login'),
+    path('login/', csrf_exempt(UserLoginView.as_view()), name='login'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
     
     # ==================== JWT Token Management ====================
