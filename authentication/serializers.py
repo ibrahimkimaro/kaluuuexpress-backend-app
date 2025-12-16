@@ -175,9 +175,9 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'email', 'full_name', 'phone_number',
             'profile_picture', 'city', 'country',
-         'is_verified', 'date_joined'
+         'is_verified', 'date_joined', 'can_create_packing_list'
         ]
-        read_only_fields = ['id', 'email', 'is_verified', 'date_joined']
+        read_only_fields = ['id', 'email', 'is_verified', 'date_joined', 'can_create_packing_list']
 
 
 class UserProfileUpdateSerializer(serializers.ModelSerializer):

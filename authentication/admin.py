@@ -22,7 +22,7 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('full_name', 'email', 'profile_picture', 'country', 'city')
         }),
         ('Permissions', {
-            'fields': ('is_active', 'is_staff', 'is_superuser'),
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'can_create_packing_list'),
             'classes': ('collapse',)
         }),
         ('Advanced Permissions', {

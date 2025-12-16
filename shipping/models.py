@@ -179,6 +179,7 @@ class PackingList(models.Model):
     """Simple Packing List - Stores only PDF files"""
     
     # Auto-generated code
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     code = models.CharField(max_length=20, unique=True)
     
     # Date
