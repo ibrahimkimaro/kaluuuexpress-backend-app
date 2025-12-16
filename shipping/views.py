@@ -122,10 +122,12 @@ def get_shipment_by_tracking(request, tracking_code):
 
 # Additional views for PackingList can be added similarly
 
-class IsStaffOrReadOnly(permissions.BasePermission):
+class IsStaffOrPackingListCreatorOrReadOnly(permissions.BasePermission):
     """
     Custom permission:
-    - Staff users can create/edit
+    - Superusers can do anything
+    - Staff users can edit/delete (but create only if they have permission)
+    - Users with can_create_packing_list permission can create
     - Regular users can only read
     """
     
@@ -134,8 +136,16 @@ class IsStaffOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return request.user and request.user.is_authenticated
         
-        # Write permissions only for staff
-        return request.user and request.user.is_authenticated and request.user.is_staff
+        # Superuser can do anything
+        if request.user.is_superuser:
+            return True
+
+        # Creation requires specific permission
+        if request.method == 'POST':
+            return getattr(request.user, 'can_create_packing_list', False)
+        
+        # Update/Delete requires staff
+        return request.user.is_staff
 
 
 class PackingListViewSet(viewsets.ModelViewSet):
@@ -151,7 +161,7 @@ class PackingListViewSet(viewsets.ModelViewSet):
     
     queryset = PackingList.objects.all()
     serializer_class = PackingListSerializer
-    permission_classes = [IsStaffOrReadOnly]
+    permission_classes = [IsStaffOrPackingListCreatorOrReadOnly]
     
     def create(self, request, *args, **kwargs):
         """
