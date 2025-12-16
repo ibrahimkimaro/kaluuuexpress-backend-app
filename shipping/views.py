@@ -130,12 +130,12 @@ class IsStaffOrPackingListCreatorOrReadOnly(permissions.BasePermission):
     - Users with can_create_packing_list permission can create
     - Regular users can only read
     """
-    
     def has_permission(self, request, view):
         # Read permissions for everyone
         if request.method in permissions.SAFE_METHODS:
             return request.user and request.user.is_authenticated
-        
+
+
         # Superuser can do anything
         if request.user.is_superuser:
             return True
@@ -143,9 +143,16 @@ class IsStaffOrPackingListCreatorOrReadOnly(permissions.BasePermission):
         # Creation requires specific permission
         if request.method == 'POST':
             return getattr(request.user, 'can_create_packing_list', False)
-        
+
         # Update/Delete requires staff
         return request.user.is_staff
+
+
+        if request.method == 'POST' and getattr(request.user, 'can_create_packing_list', False):
+            return True
+        return False
+        # Write permissions only for staff
+        #return request.user and request.user.is_authenticated and request.user.is_staff
 
 
 class PackingListViewSet(viewsets.ModelViewSet):
