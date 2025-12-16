@@ -6,7 +6,7 @@ from .views import (
     UserLogoutView,
     UserProfileView,
     ChangePasswordView,
-    PasswordResetRequestView,
+    RequestPasswordResetView,
     PasswordResetConfirmView,
     EmailVerificationView,
     LoginHistoryView,
@@ -40,7 +40,7 @@ urlpatterns = [
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
     
     # Request password reset (public)
-    path('password-reset/', PasswordResetRequestView.as_view(), name='password_reset'),
+    path('password-reset/', RequestPasswordResetView.as_view(), name='password_reset'),
     
     # Confirm password reset with token (public)
     path('password-reset-confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),

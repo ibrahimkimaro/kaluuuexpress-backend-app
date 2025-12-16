@@ -19,6 +19,13 @@ from .serializers import (
     PasswordResetConfirmSerializer, LoginHistorySerializer
 )
 
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth import get_user_model
+from .utils.email import send_password_reset_email
+# User = get_user_model()
+
 
 def get_client_ip(request):
     """Get client IP address from request"""
@@ -245,53 +252,34 @@ class ChangePasswordView(APIView):
         }, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PasswordResetRequestView(APIView):
-    """
-    API endpoint for requesting password reset
-    POST /api/auth/password-reset/
-
-    Request body:
-    {
-        "email": "user@example.com"
-    }
-    """
-
+class RequestPasswordResetView(APIView):
     permission_classes = [permissions.AllowAny]
     
     def post(self, request):
-        serializer = PasswordResetRequestSerializer(data=request.data)
+        email = request.data.get('email')
         
-        if serializer.is_valid():
-            email = serializer.validated_data['email']
-            
-            try:
-                user = User.objects.get(email=email)
-                
-                # Generate reset token
-                token = secrets.token_urlsafe(32)
-                PasswordResetToken.objects.create(
-                    user=user,
-                    token=token,
-                    expires_at=timezone.now() + timedelta(hours=1),
-                    ip_address=get_client_ip(request)
-                )
-                
-                # TODO: Send password reset email
-                send_password_reset_email(user.email, token)
-                
-            except User.DoesNotExist:
-                # Don't reveal whether user exists
-                pass
-            
-            return Response({
-                'success': True,
-                'message': 'If an account exists with this email, a password reset link has been sent.'
-            }, status=status.HTTP_200_OK)
+        if not email:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        user = User.objects.filter(email=email).first()
         
-        return Response({
-            'success': False,
-            'errors': serializer.errors
-        }, status=status.HTTP_400_BAD_REQUEST)
+        if user:
+            # Generate token and uid
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            
+            # Construct the reset link (Deep Link for App)
+            # IMPORTANT: This URL scheme must match what your App handles
+            # App Deep Link: kaluuapp://reset-password/{uid}/{token}
+            
+            reset_link = f"kaluuapp://reset-password/{uid}/{token}"
+            
+            # Send email
+            send_password_reset_email(user.email, reset_link)
+        # Always return success to prevent email enumeration attacks
+        return Response(
+            {'message': 'If an account exists with this email, a reset link has been sent.'},
+            status=status.HTTP_200_OK
+        )
 
 
 class PasswordResetConfirmView(APIView):
