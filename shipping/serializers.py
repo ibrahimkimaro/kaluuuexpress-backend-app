@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ServiceTier, WeightHandling, Invoice, Shipment, PackingList
+from .models import ServiceTier, WeightHandling, Invoice, Shipment, PackingList, Payment
 
 
 # ============ Service Tier & Weight Handling Serializers ============
@@ -15,14 +15,22 @@ class WeightHandlingSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# ============ Payment Serializer ============
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ['id', 'amount', 'date', 'payment_method', 'reference_number', 'notes', 'created_at']
+
+
 # ============ Invoice Serializers ============
 class InvoiceSerializer(serializers.ModelSerializer):
     user_full_name = serializers.CharField(source='user.full_name', read_only=True)
+    payments = PaymentSerializer(many=True, read_only=True)
     
     class Meta:
         model = Invoice
         fields = '__all__'
-        read_only_fields = ['invoice_number', 'total_amount', 'credit_amount', 'created_at']
+        read_only_fields = ['invoice_number', 'total_amount', 'credit_amount', 'created_at', 'payments']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

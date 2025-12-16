@@ -201,7 +201,7 @@ class PackingListViewSet(viewsets.ModelViewSet):
             return FileResponse(
                 packing_list.pdf_file.open('rb'),
                 as_attachment=True,
-                filename=f'{packing_list.code}.pdf',
+                filename=f'packing_list_{packing_list.unique_id}.pdf',
                 content_type='application/pdf'
             )
         except Exception as e:
