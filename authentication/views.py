@@ -8,6 +8,9 @@ from datetime import timedelta
 import secrets
 from .utils.email import send_password_reset_email
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import (
     User, EmailVerification, PasswordResetToken, 
     LoginHistory, UserSession
@@ -49,6 +52,11 @@ def create_login_history(request, user, is_successful=True, failure_reason=None)
 
 
 class UserRegistrationView(generics.CreateAPIView):
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UserRegistrationView(generics.CreateAPIView):
+
+
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.AllowAny]
     
@@ -72,6 +80,7 @@ class UserRegistrationView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
+@csrf_exempt
 class UserLoginView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = UserLoginSerializer
