@@ -22,13 +22,9 @@ class UserAdmin(BaseUserAdmin):
         ('Personal Information', {
             'fields': ('full_name', 'email', 'profile_picture', 'country', 'city')
         }),
-        ('Application Permissions', {
-            'fields': ('can_create_packing_list',),
-            'description': 'Control specific application features for this user.'
-        }),
-        ('System Permissions', {
-            'fields': ('is_active', 'is_staff', 'is_superuser'),
-            'classes': ('collapse',)
+        ('Permissions & Roles', {
+            'fields': ('is_active', 'is_staff', 'can_create_packing_list', 'is_superuser'),
+            'description': 'Manage user access and roles.'
         }),
         ('Advanced Permissions', {
             'fields': ('groups', 'user_permissions'),
