@@ -78,7 +78,6 @@ class UserRegistrationView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
-@csrf_exempt
 class UserLoginView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = UserLoginSerializer
