@@ -307,4 +307,6 @@ class PackingListAdmin(admin.ModelAdmin):
     
 
 
-    
+    def has_add_permission(self, request):
+        """Disable 'Add' button for Packing Lists in Admin"""
+        return False

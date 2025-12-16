@@ -1,10 +1,9 @@
-# utils/email.py
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
 
 def send_password_reset_email(email: str, token: str):
-    reset_link = f"http://157.245.227.236/api/auth/reset-password?token={token}"
+    reset_link = f"http://157.245.227.236/api/auth/password-reset/"
     
     subject = "Kaluu Express Cargo Password Reset"
     message = f"""
