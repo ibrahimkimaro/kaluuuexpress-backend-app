@@ -83,8 +83,12 @@ class ShipmentSerializer(serializers.ModelSerializer):
 
 
 class ShipmentCreateSerializer(serializers.ModelSerializer):
-    """Simplified serializer for creating shipments"""
-    
+    customer_email = serializers.EmailField(
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+    )
+
     class Meta:
         model = Shipment
         fields = [
@@ -100,7 +104,6 @@ class ShipmentCreateSerializer(serializers.ModelSerializer):
             'estimated_delivery',
             'admin_notes'
         ]
-
 
 
 # ============ Packing List Serializers ============

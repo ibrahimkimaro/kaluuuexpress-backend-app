@@ -166,8 +166,8 @@ class Shipment(models.Model):
     tracking_code = models.CharField(max_length=50, unique=True)
     customer = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='shipments')
     customer_name = models.CharField(max_length=255, blank=True, null=True)
-    customer_email = models.EmailField()
-    customer_phone = models.CharField(max_length=20)
+    customer_email = models.EmailField(blank=True)
+    customer_phone = models.CharField(max_length=20,null=True,blank=True)
     
     # Shipment Details
     origin = models.CharField(max_length=255)

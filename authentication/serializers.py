@@ -111,19 +111,19 @@ class UserLoginSerializer(serializers.Serializer):
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
                 raise serializers.ValidationError({
-                    'non_field_errors': 'Invalid email or password.'
+                    'non_field_errors':[ 'Invalid email or password.']
                 })
             
             # Check if account is locked
             if user.is_account_locked():
                 raise serializers.ValidationError({
-                    'non_field_errors': 'Account is temporarily locked due to multiple failed login attempts. Please try again later.'
+                 'non_field_errors':[ 'Account is temporarily locked due to multiple failed login attempts. Please try again later.']
                 })
             
             # Check if account is active
             if not user.is_active:
                 raise serializers.ValidationError({
-                    'non_field_errors': 'This account has been deactivated.'
+                    'non_field_errors':[ 'This account has been deactivated.']
                 })
             
             # Authenticate user
