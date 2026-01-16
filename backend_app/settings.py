@@ -239,7 +239,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # For Gmail
 EMAIL_PORT = 465
+<<<<<<< HEAD
 EMAIL_USE_TLS = False
+=======
+>>>>>>> 48ab406 (update podfile)
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'kaluuexpressaircargo@gmail.com'  # Your email
 EMAIL_HOST_PASSWORD = 'xatrsijjjppcrwfd'  # App password (not regular password)
