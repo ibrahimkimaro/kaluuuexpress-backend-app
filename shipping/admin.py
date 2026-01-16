@@ -293,7 +293,7 @@ class ShipmentAdmin(admin.ModelAdmin):
 
 @admin.register(PackingList)
 class PackingListAdmin(admin.ModelAdmin):
-    list_display = [ 'unique_id', 'date', 'created_by_name', 'total_cartons', 'total_weight', 'created_at']
+    list_display = ['date', 'created_by_name', 'total_cartons', 'total_weight', 'created_at']
     list_filter = ['date', 'created_by']
     search_fields = ['created_by__full_name', 'created_by__email']
     readonly_fields = ['unique_id', 'created_at', 'updated_at']
