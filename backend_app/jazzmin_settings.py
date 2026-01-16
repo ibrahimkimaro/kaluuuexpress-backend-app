@@ -28,7 +28,7 @@ JAZZMIN_SETTINGS = {
     
     # Links to put along the top menu
     "topmenu_links": [
-        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Home", "url": "admin:index", "permissions": ["authentication.view_user"]},
         {"name": "Support", "url": "https://github.com", "new_window": True},
         {"model": "authentication.User"},
     ],
@@ -40,7 +40,7 @@ JAZZMIN_SETTINGS = {
     # Additional links to include in the user menu on the top right
     "usermenu_links": [
         {"name": "Support", "url": "https://github.com", "new_window": True},
-        {"model": "authentication.user"}
+        {"model": "authentication.User"}
     ],
     
     #############
@@ -115,7 +115,7 @@ JAZZMIN_SETTINGS = {
     
     "changeform_format": "horizontal_tabs",
     "changeform_format_overrides": {
-        "authentication.user": "collapsible",
+        "authentication.User": "collapsible",
         "auth.group": "vertical_tabs"
     },
     

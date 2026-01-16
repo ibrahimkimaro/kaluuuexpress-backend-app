@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
      'rest_framework',
 'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'corsheaders',
 ]
 
@@ -73,7 +74,7 @@ MIDDLEWARE = [
      'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-   # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -82,19 +83,13 @@ CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-       # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-        'rest_framework.authentication.TokenAuthentication',  
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',  # or restrict as needed
+        'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
-    # Disable SessionAuthentication to avoid CSRF issues on API endpoints
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
@@ -104,6 +99,7 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://157.245.227.236",
     "https://157.245.227.236",
+    "http://157.245.227.236:8000",
 ]
 
 # CSRF settings for API
@@ -143,29 +139,29 @@ AUTH_USER_MODEL = 'authentication.User'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.postgresql',
-         'NAME': os.environ.get('DB_NAME', 'shipping_management'),
-         'USER': os.environ.get('DB_USER', 'kaluu'),
-         'PASSWORD': os.environ.get('DB_PASSWORD', 'kAluu@2025Express'),
-        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-         'PORT': os.environ.get('DB_PORT', '5432'),
-     }
- }
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.postgresql',
+#          'NAME': os.environ.get('DB_NAME', 'shipping_management'),
+#          'USER': os.environ.get('DB_USER', 'kaluu'),
+#          'PASSWORD': os.environ.get('DB_PASSWORD', 'kAluu@2025Express'),
+#         'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+#          'PORT': os.environ.get('DB_PORT', '5432'),
+#      }
+#  }
 
 ## for local dev
 
-# DATABASES = {
-#            'default': {
-#                'ENGINE': 'django.db.backends.postgresql',
-#                'NAME': 'shipping_management',
-#                'USER': 'kaluu',
-#                'PASSWORD': 'Kaluu@2025',
-#                'HOST': 'localhost',  # Or the IP address/hostname of your PostgreSQL server
-#                'PORT': '5432',           # Leave empty for default port or specify 5432
-#            }
-#           }
+DATABASES = {
+           'default': {
+               'ENGINE': 'django.db.backends.postgresql',
+               'NAME': 'shipping_management',
+               'USER': 'kaluu',
+               'PASSWORD': 'Kaluu@2025',
+               'HOST': 'localhost',  # Or the IP address/hostname of your PostgreSQL server
+               'PORT': '5432',           # Leave empty for default port or specify 5432
+           }
+          }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
